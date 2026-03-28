@@ -1,0 +1,1 @@
+docker build -t m-test-crawler/api .
