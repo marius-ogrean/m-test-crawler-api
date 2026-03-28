@@ -24,7 +24,8 @@ public class CompanyDataController {
     }
 
     @GetMapping(value = "/uploadCompanyNamesFromFile")
-    public void uploadCompanyNamesFromFile() {
+    public String uploadCompanyNamesFromFile() {
         companyDataService.uploadCompanyNamesFromFile();
+        return "Upload complete";
     }
 }
