@@ -4,3 +4,6 @@ spring:
 
 server:
   port : 4444
+
+solr:
+  url: http://solr:8983/solr
