@@ -120,4 +120,21 @@ public class SolrServiceImpl implements SolrService {
             }
         }
     }
+
+    @Override
+    public Long getCountFromQuery(String query) {
+        final Map<String, String> queryParamMap = new HashMap<>();
+        queryParamMap.put("q", query);
+        var queryParams = new MapSolrParams(queryParamMap);
+
+        try {
+            QueryResponse response = solrClient.query(solrCollection, queryParams);
+
+            return response.getResults().getNumFound();
+        } catch (Exception ex) {
+            LOG.error("Error retrieving document", ex);
+
+            throw new RuntimeException(ex);
+        }
+    }
 }

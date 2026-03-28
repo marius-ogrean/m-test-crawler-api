@@ -10,4 +10,5 @@ public interface SolrService {
                                List<String> allAvailableNames);
     void updateDocument(String domain, String commercialName, String legalName,
                         List<String> allAvailableNames);
+    Long getCountFromQuery(String query);
 }

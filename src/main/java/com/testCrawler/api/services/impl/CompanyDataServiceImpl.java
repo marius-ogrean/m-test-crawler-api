@@ -71,4 +71,10 @@ public class CompanyDataServiceImpl implements CompanyDataService {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public Long getCoverage() {
+        var count = solrService.getCountFromQuery("fromCrawl:(true)");
+        return count;
+    }
 }

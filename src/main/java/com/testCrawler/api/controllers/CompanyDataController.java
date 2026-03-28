@@ -28,4 +28,9 @@ public class CompanyDataController {
         companyDataService.uploadCompanyNamesFromFile();
         return "Upload complete";
     }
+
+    @GetMapping(value = "/coverage")
+    public Long getCoverage() {
+        return companyDataService.getCoverage();
+    }
 }
