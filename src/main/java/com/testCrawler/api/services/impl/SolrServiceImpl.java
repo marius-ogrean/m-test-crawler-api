@@ -4,8 +4,12 @@ import com.testCrawler.api.services.SolrService;
 import com.testCrawler.api.models.CompanyDocument;
 import com.testCrawler.api.models.RetrievalResult;
 import org.apache.solr.client.solrj.SolrClient;
+import org.apache.solr.client.solrj.beans.DocumentObjectBinder;
 import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
+import org.apache.solr.client.solrj.request.SolrQuery;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.common.params.MapSolrParams;
 import org.slf4j.Logger;
@@ -14,9 +18,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class SolrServiceImpl implements SolrService {
@@ -136,5 +138,41 @@ public class SolrServiceImpl implements SolrService {
 
             throw new RuntimeException(ex);
         }
+    }
+
+    @Override
+    public List<CompanyDocument> getAllDocumentsFromQuery(String queryString) {
+        Integer start = 0;
+        var result = new ArrayList<CompanyDocument>();
+
+        try {
+            var query = new SolrQuery();
+            query.setQuery(queryString);
+            query.setStart(start);
+            query.addSort("id", SolrQuery.ORDER.asc);
+            QueryResponse response = solrClient.query(solrCollection, query);
+
+            var resultSet = response.getResults();
+
+            long numFound = resultSet.getNumFound();
+            int current = 0;
+            while (current < numFound) {
+                current += resultSet.size();
+
+                DocumentObjectBinder binder = new DocumentObjectBinder();
+                List<CompanyDocument> companyDocuments = binder.getBeans(CompanyDocument.class, resultSet);
+                result.addAll(companyDocuments);
+
+                query.setStart(current);
+                response = solrClient.query(solrCollection, query);
+                resultSet = response.getResults();
+            }
+        } catch (Exception ex) {
+            LOG.error("Error retrieving all documents from query", ex);
+
+            throw new RuntimeException(ex);
+        }
+
+        return result;
     }
 }

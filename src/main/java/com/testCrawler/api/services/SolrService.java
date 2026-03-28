@@ -1,5 +1,6 @@
 package com.testCrawler.api.services;
 
+import com.testCrawler.api.models.CompanyDocument;
 import com.testCrawler.api.models.RetrievalResult;
 
 import java.util.List;
@@ -11,4 +12,5 @@ public interface SolrService {
     void updateDocument(String domain, String commercialName, String legalName,
                         List<String> allAvailableNames);
     Long getCountFromQuery(String query);
+    List<CompanyDocument> getAllDocumentsFromQuery(String queryString);
 }
