@@ -111,7 +111,7 @@ public class CompanyDataServiceImpl implements CompanyDataService {
             if (companyDocument.getPhoneData() != null) {
                 totalDataPoints += companyDocument.getPhoneData().size();
 
-                if (!companyDocument.getPhoneData().isEmpty()) {
+                if (companyDocument.getPhoneData().get(0).equals("#")) {
                     totalDataPoints--;
                 }
             }
@@ -119,7 +119,7 @@ public class CompanyDataServiceImpl implements CompanyDataService {
             if (companyDocument.getSocialsData() != null) {
                 totalDataPoints += companyDocument.getSocialsData().size();
 
-                if (!companyDocument.getSocialsData().isEmpty()) {
+                if (companyDocument.getSocialsData().get(0).equals("#")) {
                     totalDataPoints--;
                 }
             }
@@ -127,7 +127,7 @@ public class CompanyDataServiceImpl implements CompanyDataService {
             if (companyDocument.getAddressData() != null) {
                 totalDataPoints += companyDocument.getAddressData().size();
 
-                if (!companyDocument.getAddressData().isEmpty()) {
+                if (companyDocument.getAddressData().get(0).equals("#")) {
                     totalDataPoints--;
                 }
             }
