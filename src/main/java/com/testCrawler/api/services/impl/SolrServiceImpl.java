@@ -62,6 +62,9 @@ public class SolrServiceImpl implements SolrService {
                                       List<String> allAvailableNames) {
         var companyDocument = CompanyDocument.builder()
                 .id(domain)
+                .phoneData(List.of("#"))
+                .socialsData(List.of("#"))
+                .addressData(List.of("#"))
                 .commercialName(StringUtils.hasText(commercialName) ? List.of(commercialName) : null)
                 .legalName(StringUtils.hasText(legalName) ? List.of(legalName) : null)
                 .allAvailableNames(allAvailableNames)

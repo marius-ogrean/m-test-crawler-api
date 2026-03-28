@@ -110,14 +110,26 @@ public class CompanyDataServiceImpl implements CompanyDataService {
         for (var companyDocument : allDocuments) {
             if (companyDocument.getPhoneData() != null) {
                 totalDataPoints += companyDocument.getPhoneData().size();
+
+                if (!companyDocument.getPhoneData().isEmpty()) {
+                    totalDataPoints--;
+                }
             }
 
             if (companyDocument.getSocialsData() != null) {
                 totalDataPoints += companyDocument.getSocialsData().size();
+
+                if (!companyDocument.getSocialsData().isEmpty()) {
+                    totalDataPoints--;
+                }
             }
 
             if (companyDocument.getAddressData() != null) {
                 totalDataPoints += companyDocument.getAddressData().size();
+
+                if (!companyDocument.getAddressData().isEmpty()) {
+                    totalDataPoints--;
+                }
             }
         }
 
