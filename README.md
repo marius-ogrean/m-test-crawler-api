@@ -14,4 +14,6 @@ The api has the following endpoints:
 3. GET http://localhost:4444/companyData/coverage - see the total number of websites and how many were crawled
 4. GET http://localhost:4444/companyData/fillRate - see the number of crawled websites and the total data points
 
+You can see more details in the Swagger page: http://localhost:4444/swagger-ui/index.html#/
+
 In order to be able to use the api, after running the two commands above please follow the steps from the project m-test-crawler
