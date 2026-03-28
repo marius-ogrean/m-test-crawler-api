@@ -1,5 +1,6 @@
 package com.testCrawler.api.services.impl;
 
+import com.testCrawler.api.models.Coverage;
 import com.testCrawler.api.models.FillRate;
 import com.testCrawler.api.services.CompanyDataService;
 import com.testCrawler.api.services.SolrService;
@@ -76,9 +77,19 @@ public class CompanyDataServiceImpl implements CompanyDataService {
     }
 
     @Override
-    public Long getCoverage() {
-        var count = solrService.getCountFromQuery("fromCrawl:(true)");
-        return count;
+    public Coverage getCoverage() {
+        var crawledCount = solrService.getCountFromQuery("fromCrawl:(true)");
+        var notCrawledCount = solrService.getCountFromQuery("fromCrawl:(false)");
+        var total = crawledCount + notCrawledCount;
+
+        return Coverage.builder()
+                .crawled(crawledCount)
+                .totalWebsites(total)
+                .percentage(BigDecimal.valueOf(crawledCount)
+                        .divide(BigDecimal.valueOf(total), 4, RoundingMode.HALF_UP)
+                        .multiply(BigDecimal.valueOf(100))
+                        .setScale(2, RoundingMode.HALF_UP))
+                .build();
     }
 
     @Override
@@ -87,7 +98,7 @@ public class CompanyDataServiceImpl implements CompanyDataService {
 
         var fillRate = new FillRate();
 
-        fillRate.setCoverage(allDocuments.size());
+        fillRate.setCrawled(allDocuments.size());
 
         int totalDataPoints = 0;
 

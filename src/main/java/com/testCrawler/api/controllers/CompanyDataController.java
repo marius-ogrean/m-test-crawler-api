@@ -1,5 +1,6 @@
 package com.testCrawler.api.controllers;
 
+import com.testCrawler.api.models.Coverage;
 import com.testCrawler.api.models.FillRate;
 import com.testCrawler.api.services.CompanyDataService;
 import com.testCrawler.api.services.SolrService;
@@ -9,8 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.math.BigDecimal;
 
 @RestController
 @RequestMapping("companyData")
@@ -33,7 +32,7 @@ public class CompanyDataController {
     }
 
     @GetMapping(value = "/coverage")
-    public Long getCoverage() {
+    public Coverage getCoverage() {
         return companyDataService.getCoverage();
     }
 

@@ -11,8 +11,8 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Data
 @Builder
-public class FillRate {
-    private int crawled;
-    private int totalDataPoints;
-    private BigDecimal dataPointsPerWebsite;
+public class Coverage {
+    private long totalWebsites;
+    private long crawled;
+    private BigDecimal percentage;
 }
