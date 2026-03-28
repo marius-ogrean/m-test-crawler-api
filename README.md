@@ -10,7 +10,7 @@ Details:
 The api has the following endpoints:
 
 1. GET http://localhost:4444/companyData/document/{domain} - to retrieve the data for a specific domain
-2. GET http://localhost:4444/companyData/uploadCompanyNamesFromFile - to seed the data from the company names file; it is a GET for ease of use in a browser
+2. GET http://localhost:4444/companyData/uploadCompanyNamesFromFile - to seed the data from the company names file; it is a GET for ease of use in a browser, otherwise it should have been a POST
 3. GET http://localhost:4444/companyData/coverage - see the total number of websites and how many were crawled
 4. GET http://localhost:4444/companyData/fillRate - see the number of crawled websites and the total data points
 
