@@ -4,6 +4,9 @@ Steps to create the image:
 1. In the root folder run "mvn clean package"
 2. Run the script create_image.cmd
 
+Details:
+-
+
 The api has the following endpoints:
 
 1. GET http://localhost:4444/companyData/document/{domain} - to retrieve the data for a specific domain
