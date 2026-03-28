@@ -82,13 +82,18 @@ public class CompanyDataServiceImpl implements CompanyDataService {
         var notCrawledCount = solrService.getCountFromQuery("fromCrawl:(false)");
         var total = crawledCount + notCrawledCount;
 
+        BigDecimal percentage = BigDecimal.ZERO;
+        if (total != 0) {
+            percentage = BigDecimal.valueOf(crawledCount)
+                    .divide(BigDecimal.valueOf(total), 4, RoundingMode.HALF_UP)
+                    .multiply(BigDecimal.valueOf(100))
+                    .setScale(2, RoundingMode.HALF_UP);
+        }
+
         return Coverage.builder()
                 .crawled(crawledCount)
                 .totalWebsites(total)
-                .percentage(BigDecimal.valueOf(crawledCount)
-                        .divide(BigDecimal.valueOf(total), 4, RoundingMode.HALF_UP)
-                        .multiply(BigDecimal.valueOf(100))
-                        .setScale(2, RoundingMode.HALF_UP))
+                .percentage(percentage)
                 .build();
     }
 
@@ -116,9 +121,14 @@ public class CompanyDataServiceImpl implements CompanyDataService {
             }
         }
 
+        BigDecimal dataPointsPerWebsite = BigDecimal.ZERO;
+        if (!allDocuments.isEmpty()) {
+            dataPointsPerWebsite = BigDecimal.valueOf(totalDataPoints)
+                    .divide(BigDecimal.valueOf(allDocuments.size()), 2, RoundingMode.HALF_UP);
+        }
+
         fillRate.setTotalDataPoints(totalDataPoints);
-        fillRate.setDataPointsPerWebsite(BigDecimal.valueOf(totalDataPoints)
-                .divide(BigDecimal.valueOf(allDocuments.size()), 2, RoundingMode.HALF_UP));
+        fillRate.setDataPointsPerWebsite(dataPointsPerWebsite);
 
         return fillRate;
     }
