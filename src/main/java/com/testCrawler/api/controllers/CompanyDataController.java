@@ -47,8 +47,7 @@ public class CompanyDataController {
 
     @GetMapping(value = "/getMatch")
     public MatchOutput getMatch(@RequestBody Input input) {
-        return companyDataService.matchInput(input.getCompanyName(), input.getPhone(), input.getWebsite(),
-                input.getFacebook());
+        return companyDataService.matchInput(input);
     }
 
     @GetMapping(value = "/getFileMatch")

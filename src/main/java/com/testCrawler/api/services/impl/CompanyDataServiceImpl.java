@@ -148,19 +148,12 @@ public class CompanyDataServiceImpl implements CompanyDataService {
     }
 
     @Override
-    public MatchOutput matchInput(String companyName, String phone, String website, String facebook) {
-        var input = Input.builder()
-                .companyName(companyName)
-                .phone(phone)
-                .website(website)
-                .facebook(facebook)
-                .build();
-
+    public MatchOutput matchInput(Input input) {
         var result = MatchOutput.builder()
                 .input(input)
                 .build();
 
-        var domain = getDomain(website);
+        var domain = getDomain(input.getWebsite());
 
         if (domain != null) {
             var retrievalResult = solrService.getCompanyDocument(domain);
@@ -171,8 +164,21 @@ public class CompanyDataServiceImpl implements CompanyDataService {
             }
         }
 
-        var documents = solrService.getAllDocumentsFromQuery(String.format("phoneData:\"%s\" OR socialsData:\"%s\" OR commercialName:\"%s\" OR allAvailableNames:\"%s\" OR legalName:\"%s\"",
-                phone, facebook, companyName, companyName, companyName));
+        String query = "";
+        if (StringUtils.hasText(input.getPhone())) {
+            query += String.format("phoneData:\"%s\"", input.getPhone());
+        }
+
+        if (StringUtils.hasText(input.getFacebook())) {
+            query += String.format(" OR socialsData:\"%s\"", input.getFacebook());
+        }
+
+        if (StringUtils.hasText(input.getCompanyName())) {
+            query += String.format(" OR commercialName:\"%s\" OR allAvailableNames:\"%s\" OR legalName:\"%s\"",
+                    input.getCompanyName(), input.getCompanyName(), input.getCompanyName());
+        }
+
+        var documents = solrService.getAllDocumentsFromQuery(query);
 
         if (!documents.isEmpty()) {
             result.setCompanyHasBeenCrawled(documents.get(0).getFromCrawl().get(0));
@@ -204,7 +210,13 @@ public class CompanyDataServiceImpl implements CompanyDataService {
 
                 var lineParts = line.split(",");
 
-                var matchOutput = matchInput(lineParts[0], lineParts[1], lineParts[2], lineParts[3]);
+                var input = Input.builder()
+                        .companyName(lineParts[0])
+                        .phone(lineParts[1])
+                        .website(lineParts[2])
+                        .facebook(lineParts[3]).build();
+
+                var matchOutput = matchInput(input);
 
                 if (matchOutput.getCompanyDocument() != null) {
                     result.setNumberOfMatches(result.getNumberOfMatches() + 1);
