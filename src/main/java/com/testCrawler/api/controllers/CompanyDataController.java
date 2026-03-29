@@ -52,7 +52,7 @@ public class CompanyDataController {
     }
 
     @GetMapping(value = "/getFileMatches")
-    public FileMatchOutput getFileMatch() {
+    public FileMatchOutput getFileMatches() {
         return companyDataService.matchInputFromFile();
     }
 }
