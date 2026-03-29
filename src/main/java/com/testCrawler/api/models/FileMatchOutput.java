@@ -12,6 +12,7 @@ import java.util.List;
 @Data
 @Builder
 public class FileMatchOutput {
+    private int numberOfInputs;
     private int numberOfMatches;
     private int numberOfCrawledWebsites;
     private List<MatchOutput> results;

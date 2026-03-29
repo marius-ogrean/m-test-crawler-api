@@ -202,6 +202,8 @@ public class CompanyDataServiceImpl implements CompanyDataService {
                 .results(new ArrayList<>())
                 .build();
 
+        var numberOfInputs = 0;
+
         try (var inputStream = classloader.getResourceAsStream("API-input-sample.csv");
              var streamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
              var reader = new BufferedReader(streamReader)) {
@@ -213,6 +215,8 @@ public class CompanyDataServiceImpl implements CompanyDataService {
                 if (line == null) {
                     break;
                 }
+
+                numberOfInputs++;
 
                 var lineParts = line.split(",", -1);
 
@@ -235,10 +239,12 @@ public class CompanyDataServiceImpl implements CompanyDataService {
             throw new RuntimeException(e);
         }
 
+        result.setNumberOfInputs(numberOfInputs);
+
         var numberOfCrawledWebsites = 0;
 
         for(var matchOutput : result.getResults()) {
-            if (matchOutput.getCompanyDocument().getFromCrawl().get(0)) {
+            if (matchOutput.getCompanyDocument() != null && matchOutput.getCompanyDocument().getFromCrawl().get(0)) {
                 numberOfCrawledWebsites++;
             }
         }
