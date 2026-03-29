@@ -199,7 +199,8 @@ public class CompanyDataServiceImpl implements CompanyDataService {
         var classloader = Thread.currentThread().getContextClassLoader();
 
         var result = FileMatchOutput.builder()
-                .results(new ArrayList<>())
+                .matches(new ArrayList<>())
+                .nonMatches(new ArrayList<>())
                 .build();
 
         var numberOfInputs = 0;
@@ -230,9 +231,10 @@ public class CompanyDataServiceImpl implements CompanyDataService {
 
                 if (matchOutput.getCompanyDocument() != null) {
                     result.setNumberOfMatches(result.getNumberOfMatches() + 1);
+                    result.getMatches().add(matchOutput);
+                } else {
+                    result.getNonMatches().add(matchOutput);
                 }
-
-                result.getResults().add(matchOutput);
             }
         } catch (Exception e) {
             LOG.error("File match exception", e);
@@ -243,7 +245,7 @@ public class CompanyDataServiceImpl implements CompanyDataService {
 
         var numberOfCrawledWebsites = 0;
 
-        for(var matchOutput : result.getResults()) {
+        for(var matchOutput : result.getMatches()) {
             if (matchOutput.getCompanyDocument() != null && matchOutput.getCompanyDocument().getFromCrawl().get(0)) {
                 numberOfCrawledWebsites++;
             }

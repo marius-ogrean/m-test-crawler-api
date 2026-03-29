@@ -15,5 +15,6 @@ public class FileMatchOutput {
     private int numberOfInputs;
     private int numberOfMatches;
     private int numberOfCrawledWebsites;
-    private List<MatchOutput> results;
+    private List<MatchOutput> matches;
+    private List<MatchOutput> nonMatches;
 }
