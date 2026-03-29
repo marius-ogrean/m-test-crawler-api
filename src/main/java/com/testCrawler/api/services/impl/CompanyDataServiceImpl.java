@@ -40,7 +40,7 @@ public class CompanyDataServiceImpl implements CompanyDataService {
                     break;
                 }
 
-                var lineParts = line.split(",");
+                var lineParts = line.split(",", -1);
 
                 var domain = lineParts[0];
 
@@ -52,7 +52,7 @@ public class CompanyDataServiceImpl implements CompanyDataService {
                 if (StringUtils.hasText(lineParts[3])) {
                     allAvailableNames = new ArrayList<>();
 
-                    var names = lineParts[3].split("\\|");
+                    var names = lineParts[3].split("\\|", -1);
 
                     for (var name : names) {
                         allAvailableNames.add(name.trim());
@@ -208,7 +208,7 @@ public class CompanyDataServiceImpl implements CompanyDataService {
                     break;
                 }
 
-                var lineParts = line.split(",");
+                var lineParts = line.split(",", -1);
 
                 var input = Input.builder()
                         .companyName(lineParts[0])
