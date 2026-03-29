@@ -65,9 +65,9 @@ public class SolrServiceImpl implements SolrService {
                 .phoneData(List.of("#"))
                 .socialsData(List.of("#"))
                 .addressData(List.of("#"))
-                .commercialName(StringUtils.hasText(commercialName) ? List.of(commercialName) : null)
-                .legalName(StringUtils.hasText(legalName) ? List.of(legalName) : null)
-                .allAvailableNames(allAvailableNames)
+                .commercialName(StringUtils.hasText(commercialName) ? List.of(commercialName) : List.of("#"))
+                .legalName(StringUtils.hasText(legalName) ? List.of(legalName) : List.of("#"))
+                .allAvailableNames(!allAvailableNames.isEmpty() ? allAvailableNames : List.of("#"))
                 .fromCrawl(List.of(false))
                 .build();
 

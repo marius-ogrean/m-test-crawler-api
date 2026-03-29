@@ -12,4 +12,5 @@ import lombok.NoArgsConstructor;
 public class MatchOutput {
     private Input input;
     private CompanyDocument companyDocument;
+    private boolean companyHasBeenCrawled;
 }

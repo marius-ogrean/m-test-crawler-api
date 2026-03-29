@@ -13,6 +13,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -155,7 +156,30 @@ public class CompanyDataServiceImpl implements CompanyDataService {
                 .facebook(facebook)
                 .build();
 
-        return null;
+        var result = MatchOutput.builder()
+                .input(input)
+                .build();
+
+        var domain = getDomain(website);
+
+        if (domain != null) {
+            var retrievalResult = solrService.getCompanyDocument(domain);
+            if (retrievalResult.getCompanyDocument() != null) {
+                result.setCompanyHasBeenCrawled(retrievalResult.getCompanyDocument().getFromCrawl().get(0));
+                result.setCompanyDocument(retrievalResult.getCompanyDocument());
+                return result;
+            }
+        }
+
+        var documents = solrService.getAllDocumentsFromQuery(String.format("phoneData:\"%s\" OR socialsData:\"%s\" OR commercialName:\"%s\" OR allAvailableNames:\"%s\" OR legalName:\"%s\"",
+                phone, facebook, companyName, companyName, companyName));
+
+        if (!documents.isEmpty()) {
+            result.setCompanyHasBeenCrawled(documents.get(0).getFromCrawl().get(0));
+            result.setCompanyDocument(documents.get(0));
+        }
+
+        return result;
     }
 
     @Override
@@ -194,5 +218,24 @@ public class CompanyDataServiceImpl implements CompanyDataService {
         }
 
         return result;
+    }
+
+    String getDomain(String website) {
+        if (website == null) {
+            return null;
+        }
+
+        website = website.replace("https", "")
+                .replace("http", "")
+                .replace("//", "")
+                .replace(":", "");
+
+        try {
+            var url = new URL("http://" + website);
+
+            return url.getHost();
+        } catch (Exception e) {
+            return null;
+        }
     }
 }
