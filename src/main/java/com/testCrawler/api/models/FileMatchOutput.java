@@ -1,0 +1,17 @@
+package com.testCrawler.api.models;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.List;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
+@Builder
+public class FileMatchOutput {
+    private int numberOfMatches;
+    private List<MatchOutput> results;
+}

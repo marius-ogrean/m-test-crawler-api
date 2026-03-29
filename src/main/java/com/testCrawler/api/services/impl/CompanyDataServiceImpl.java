@@ -1,7 +1,6 @@
 package com.testCrawler.api.services.impl;
 
-import com.testCrawler.api.models.Coverage;
-import com.testCrawler.api.models.FillRate;
+import com.testCrawler.api.models.*;
 import com.testCrawler.api.services.CompanyDataService;
 import com.testCrawler.api.services.SolrService;
 import lombok.AllArgsConstructor;
@@ -27,6 +26,7 @@ public class CompanyDataServiceImpl implements CompanyDataService {
     @Override
     public void uploadCompanyNamesFromFile() {
         var classloader = Thread.currentThread().getContextClassLoader();
+
         try (var inputStream = classloader.getResourceAsStream("sample-websites-company-names.csv");
              var streamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
              var reader = new BufferedReader(streamReader)) {
@@ -72,6 +72,7 @@ public class CompanyDataServiceImpl implements CompanyDataService {
                 }
             }
         } catch (Exception e) {
+            LOG.error("Upload exception", e);
             throw new RuntimeException(e);
         }
     }
@@ -143,5 +144,55 @@ public class CompanyDataServiceImpl implements CompanyDataService {
         fillRate.setDataPointsPerWebsite(dataPointsPerWebsite);
 
         return fillRate;
+    }
+
+    @Override
+    public MatchOutput matchInput(String companyName, String phone, String website, String facebook) {
+        var input = Input.builder()
+                .companyName(companyName)
+                .phone(phone)
+                .website(website)
+                .facebook(facebook)
+                .build();
+
+        return null;
+    }
+
+    @Override
+    public FileMatchOutput matchInputFromFile() {
+        var classloader = Thread.currentThread().getContextClassLoader();
+
+        var result = FileMatchOutput.builder()
+                .results(new ArrayList<>())
+                .build();
+
+        try (var inputStream = classloader.getResourceAsStream("API-input-sample.csv");
+             var streamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
+             var reader = new BufferedReader(streamReader)) {
+            reader.readLine();
+
+            while (true) {
+                var line = reader.readLine();
+
+                if (line == null) {
+                    break;
+                }
+
+                var lineParts = line.split(",");
+
+                var matchOutput = matchInput(lineParts[0], lineParts[1], lineParts[2], lineParts[3]);
+
+                if (matchOutput.getCompanyDocument() != null) {
+                    result.setNumberOfMatches(result.getNumberOfMatches() + 1);
+                }
+
+                result.getResults().add(matchOutput);
+            }
+        } catch (Exception e) {
+            LOG.error("File match exception", e);
+            throw new RuntimeException(e);
+        }
+
+        return result;
     }
 }
