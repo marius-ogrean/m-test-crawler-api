@@ -170,11 +170,17 @@ public class CompanyDataServiceImpl implements CompanyDataService {
         }
 
         if (StringUtils.hasText(input.getFacebook())) {
-            query += String.format(" OR socialsData:\"%s\"", input.getFacebook());
+            if (!query.isBlank()) {
+                query += " OR ";
+            }
+            query += String.format("socialsData:\"%s\"", input.getFacebook());
         }
 
         if (StringUtils.hasText(input.getCompanyName())) {
-            query += String.format(" OR commercialName:\"%s\" OR allAvailableNames:\"%s\" OR legalName:\"%s\"",
+            if (!query.isBlank()) {
+                query += " OR ";
+            }
+            query += String.format("commercialName:\"%s\" OR allAvailableNames:\"%s\" OR legalName:\"%s\"",
                     input.getCompanyName(), input.getCompanyName(), input.getCompanyName());
         }
 
@@ -228,6 +234,16 @@ public class CompanyDataServiceImpl implements CompanyDataService {
             LOG.error("File match exception", e);
             throw new RuntimeException(e);
         }
+
+        var numberOfCrawledWebsites = 0;
+
+        for(var matchOutput : result.getResults()) {
+            if (matchOutput.getCompanyDocument().getFromCrawl().get(0)) {
+                numberOfCrawledWebsites++;
+            }
+        }
+
+        result.setNumberOfCrawledWebsites(numberOfCrawledWebsites);
 
         return result;
     }
