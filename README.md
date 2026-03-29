@@ -13,6 +13,8 @@ The api has the following endpoints:
 2. GET http://localhost:4444/companyData/uploadCompanyNamesFromFile - to seed the data from the company names file; it is a GET for ease of use in a browser, otherwise it should have been a POST
 3. GET http://localhost:4444/companyData/coverage - see the total number of websites and how many were crawled
 4. GET http://localhost:4444/companyData/fillRate - see the number of crawled websites and the total data points
+5. POST http://localhost:4444/companyData/getMatch - search a match for a single input (you can use Swagger to test the POST)
+6. GET http://localhost:4444/companyData/getFileMatches - get matches for all the inputs in the sample file
 
 You can see more details in the Swagger page: http://localhost:4444/swagger-ui/index.html
 
