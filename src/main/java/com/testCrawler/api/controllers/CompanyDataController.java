@@ -51,7 +51,7 @@ public class CompanyDataController {
         return companyDataService.matchInput(input);
     }
 
-    @GetMapping(value = "/getFileMatch")
+    @GetMapping(value = "/getFileMatches")
     public FileMatchOutput getFileMatch() {
         return companyDataService.matchInputFromFile();
     }
