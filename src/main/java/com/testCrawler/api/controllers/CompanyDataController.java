@@ -1,13 +1,17 @@
 package com.testCrawler.api.controllers;
 
 import com.testCrawler.api.models.Coverage;
+import com.testCrawler.api.models.FileMatchOutput;
 import com.testCrawler.api.models.FillRate;
+import com.testCrawler.api.models.Input;
+import com.testCrawler.api.models.MatchOutput;
 import com.testCrawler.api.services.CompanyDataService;
 import com.testCrawler.api.services.SolrService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -39,5 +43,16 @@ public class CompanyDataController {
     @GetMapping(value = "/fillRate")
     public FillRate getFillRate() {
         return companyDataService.getFillRate();
+    }
+
+    @GetMapping(value = "/getMatch")
+    public MatchOutput getMatch(@RequestBody Input input) {
+        return companyDataService.matchInput(input.getCompanyName(), input.getPhone(), input.getWebsite(),
+                input.getFacebook());
+    }
+
+    @GetMapping(value = "/getFileMatch")
+    public FileMatchOutput getFileMatch() {
+        return companyDataService.matchInputFromFile();
     }
 }
